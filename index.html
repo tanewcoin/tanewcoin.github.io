@@ -284,16 +284,46 @@ footer {
   
   <p id="walletStatus">Wallet not connected</p>
 </div>  
+<div id="walletMenu" style="display:none;max-width:420px;margin:16px auto;padding:18px;background:#111827;border:1px solid #374151;border-radius:20px;text-align:left;">
+  <div style="font-size:20px;font-weight:700;margin-bottom:14px;">Choose an option</div>
+
+<button id="bitgetBtn" type="button">👛 Bitget Wallet – Wallet</button><br><br>
+<button id="phantomBtn" type="button">👻 Phantom – Wallet</button><br><br>
+<button id="pumpBtn" type="button">🚀 Pump.fun – Buy TANEW</button><br><br>
+<button id="geckoBtn" type="button">📊 CoinGecko – View Chart</button><br><br>
+
+<button id="cancelBtn" type="button">Cancel</button>  
+  
+  
+  
+
+  
+  </div>
+</div>
 <script>
   const connectBtn = document.getElementById("connectWalletBtn");
 const walletStatus = document.getElementById("walletStatus");
+const walletMenu = document.getElementById("walletMenu");
 
-connectBtn.addEventListener("click", async () => {
+connectBtn.addEventListener("click", () => {
+  walletMenu.style.display = "block";
+  walletStatus.textContent = "Choose an option below";
+});
+const cancelBtn = document.getElementById("cancelBtn");
+
+cancelBtn.addEventListener("click", () => {
+  walletMenu.style.display = "none";
+  walletStatus.textContent = "Wallet not connected";
+});
+const bitgetBtn = document.getElementById("bitgetBtn");
+
+bitgetBtn.addEventListener("click", async () => {
   try {
-    const provider = window.phantom?.solana;
+    const provider = window.bitkeep?.solana;
 
-    if (!provider?.isPhantom) {
-      walletStatus.textContent = "Phantom Wallet not found";
+    if (!provider) {
+      walletStatus.textContent = "Bitget Wallet not found";
+      window.open("https://web3.bitget.com/", "_blank");
       return;
     }
 
@@ -303,12 +333,67 @@ connectBtn.addEventListener("click", async () => {
     walletStatus.textContent =
       "Connected: " + address.slice(0, 4) + "..." + address.slice(-4);
 
-    connectBtn.textContent = "Wallet Connected";
+    walletMenu.style.display = "none";
   } catch (error) {
     console.error(error);
     walletStatus.textContent = "Connection cancelled";
   }
 });
+const phantomBtn = document.getElementById("phantomBtn");
+
+phantomBtn.addEventListener("click", async () => {
+  try {
+    const provider = window.phantom?.solana;
+
+    if (!provider?.isPhantom) {
+      walletStatus.textContent = "Phantom Wallet not found";
+      window.open("https://phantom.com/", "_blank");
+      return;
+    }
+
+    const response = await provider.connect();
+    const address = response.publicKey.toString();
+
+    walletStatus.textContent =
+      "Connected: " + address.slice(0, 4) + "..." + address.slice(-4);
+
+    walletMenu.style.display = "none";
+  } catch (error) {
+    console.error(error);
+    walletStatus.textContent = "Connection cancelled";
+  }
+});    
+const pumpBtn = document.getElementById("pumpBtn");
+const geckoBtn = document.getElementById("geckoBtn");
+
+pumpBtn.addEventListener("click", () => {
+  window.open(
+    "https://pump.fun/coin/AuLBFUhS5571sW9ok3y4vX8hYvUhE2GGpEiWsfjQpump",
+    "_blank"
+  );
+});
+
+geckoBtn.addEventListener("click", () => {
+  window.open(
+    "https://www.geckoterminal.com/solana/pools?token_address=AuLBFUhS5571sW9ok3y4vX8hYvUhE2GGpEiWsfjQpump",
+    "_blank"
+  );
+});
+    
+    
+    
+    
+
+    
+    
+   
+
+
+  
+    
+    
+  
+
   console.log("TANEW system ready");
 </script>
 </body>
