@@ -279,7 +279,35 @@ footer {
   <p><strong>⚠️ ALWAYS VERIFY THE CONTRACT ADDRESS.</strong><br>
   NEVER SEND YOUR SEED PHRASE OR PRIVATE KEY TO ANYONE.</p>
 </section>
+<div style="text-align:center; margin:30px 0;">
+  <button id="connectWalletBtn" type="button">Connect Wallet</button>
+  <p id="walletStatus">Wallet not connected</p>
+</div>  
 <script>
+  const connectBtn = document.getElementById("connectWalletBtn");
+const walletStatus = document.getElementById("walletStatus");
+
+connectBtn.addEventListener("click", async () => {
+  try {
+    const provider = window.phantom?.solana;
+
+    if (!provider?.isPhantom) {
+      walletStatus.textContent = "Phantom Wallet not found";
+      return;
+    }
+
+    const response = await provider.connect();
+    const address = response.publicKey.toString();
+
+    walletStatus.textContent =
+      "Connected: " + address.slice(0, 4) + "..." + address.slice(-4);
+
+    connectBtn.textContent = "Wallet Connected";
+  } catch (error) {
+    console.error(error);
+    walletStatus.textContent = "Connection cancelled";
+  }
+});
   console.log("TANEW system ready");
 </script>
 </body>
